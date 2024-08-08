@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/formatters";
 import { Trash2 } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 export default function   Cart() {
   const { cart, removeFromCart } = useCart();
@@ -81,6 +82,15 @@ export default function   Cart() {
           ))}
         </div>
       )}
+      {cart.length > 0 && (
+        <div className="mt-8 p-6 rounded-lg shadow-sm">
+          <div className="flex flex-col justify-between gap-2">
+            <div className="font-medium text-lg">Order Note</div>
+            <Textarea className="w-full h-32 mb-4" placeholder='Type Notes... '/>
+          </div>
+        </div>
+      )}
+
       {cart.length > 0 && (
         <div className="mt-8 bg-background p-6 rounded-lg shadow-lg">
           <div className="flex items-center justify-between">

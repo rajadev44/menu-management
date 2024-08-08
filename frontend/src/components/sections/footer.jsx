@@ -60,25 +60,25 @@ export const Footer2 = () => {
   if (!timings) return null;
 
   return (
-    <footer className="bg-black/10 text-muted-foreground px-4 py-8 mt-5 md:mt-8 sm:px-6 lg:px-8">
-      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div>
+    <footer className="bg-black/10 text-muted-foreground px-4 py-8 mt-5 md:mt-8 sm:px-6 lg:px-8 sticky top-[100vh]">
+      <div className="container px-0 grid grid-cols-1 sm:grid-cols-2 lg:flex justify-between gap-8">
+        <div className="max-w-80">
           <h3 className="text-lg font-bold mb-4">About Us</h3>
           <p>
             MMS is a family-owned establishment serving delicious meals made with fresh, high-quality
             ingredients.
           </p>
         </div>
-        <div>
+        <div className="min-w-72">
           <h3 className="text-lg font-bold mb-4">Business Hours</h3>
           <ul>
-  {timings.map((timing) => (
-    <li key={timing.id} className="flex justify-between">
-      <span className="w-1/3">{timing.day}:</span>
-      <span className="w-2/3"> {timing.isOutOfService ? '(Out of Service)' : timing.hours}</span>
-    </li>
-  ))}
-</ul>
+            {timings.map((timing) => (
+              <li key={timing.id} className="flex justify-between">
+                <span className="w-1/3">{timing.day}:</span>
+                <span className="w-2/3"> {timing.isOutOfService ? '(Out of Service)' : timing.hours}</span>
+              </li>
+            ))}
+          </ul>
 
         </div>
         <div>

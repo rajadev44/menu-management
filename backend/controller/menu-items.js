@@ -12,7 +12,11 @@ router.get('/', async (req, res) => {
   const menuItems = await prisma.menuItem.findMany({
     include: {
       ingredients: true,
-      sizes: true,
+      sizes: {
+        orderBy: {
+          price: 'asc', 
+        },
+      },
       baseIngredients: true,
     },
   });
@@ -25,7 +29,11 @@ router.get('/top', async (req, res) => {
     take: 3,
     include: {
       ingredients: true,
-      sizes: true,
+      sizes:  {
+        orderBy: {
+          price: 'asc', 
+        },
+      },
       baseIngredients: true,
     },
   });
@@ -39,7 +47,11 @@ router.get('/:id', async (req, res) => {
     where: { id },
     include: {
       ingredients: true,
-      sizes: true,
+      sizes:  {
+        orderBy: {
+          price: 'asc', 
+        },
+      },
       baseIngredients: true,
     },
   });
@@ -73,7 +85,11 @@ router.post('/', uploadImage.single('image'), async (req, res) => {
     },
     include: {
       ingredients: true,
-      sizes: true,
+      sizes:  {
+        orderBy: {
+          price: 'asc', 
+        },
+      },
       baseIngredients: true,
     },
   });
@@ -126,7 +142,11 @@ router.put('/:id', uploadImage.single('image'), async (req, res) => {
     },
     include: {
       ingredients: true,
-      sizes: true,
+      sizes:  {
+        orderBy: {
+          price: 'asc', 
+        },
+      },
       baseIngredients: true,
     },
   });

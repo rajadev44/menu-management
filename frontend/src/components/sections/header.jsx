@@ -23,7 +23,6 @@ const routes = [
 
 const Header = () => {
   const navigate = useNavigate();
-
   // eslint-disable-next-line no-unused-vars
   const [_, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -44,18 +43,15 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (location.pathname !== '/items' && search) {
-      navigate(`/items?search=${encodeURIComponent(search)}`);
-    }
     if (!search || search === '') {
       setSearchParams((params) => {
         params.delete('search');
         return params;
       });
     }
-  }, [search, location.pathname, navigate, setSearchParams]);
+  }, [search, location.pathname,  setSearchParams]);
 
-
+  const notItemsPath = location.pathname !== '/items';
   
   useEffect(() => {
     if (isListening) {
@@ -151,6 +147,7 @@ const Header = () => {
             >
               { <MicIcon className={`w-5 h-5 ${isListening && 'animate-pulse'}`} />}
             </Button>
+            {notItemsPath && <ReactLink to='/items' className="absolute inset-0" ></ReactLink>}
           </div>
           <DarkModeBtn />
         </div>

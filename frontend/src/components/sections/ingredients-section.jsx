@@ -63,7 +63,7 @@ export default function IngredientsPage() {
       <div className="grid gap-8">
         <div>
           <h2 className="text-2xl font-bold mb-4">Add New Ingredient</h2>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 max-w-52">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input

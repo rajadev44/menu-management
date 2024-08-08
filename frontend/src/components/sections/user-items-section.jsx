@@ -93,6 +93,7 @@ export default function UserItemsSections() {
   if (error) return <div>Failed to load menu items</div>;
   if (isLoading) return <div className='w-full flex justify-center items-center my-2'><Loader className='w-20 h-20' /></div>;
 
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 p-4 md:p-8">
       <SidebarFilter filters={filters} setFilters={setFilters} />
@@ -116,6 +117,7 @@ export default function UserItemsSections() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(!filteredMenuItems || filteredMenuItems.length === 0) && <div><p className="font-medium text-muted-foreground/60" >Not found</p></div>}
           {filteredMenuItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item) => (
             <Link
               to={'/items/' + item.id}
@@ -146,9 +148,9 @@ export default function UserItemsSections() {
             </Link>
           ))}
         </div>
-        <div className="flex justify-center mt-8">
+        {!(!filteredMenuItems || filteredMenuItems.length === 0) && <div className="flex justify-center mt-8">
           <PaginationComponent currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
-        </div>
+        </div>}
       </div>
     </div>
   );
