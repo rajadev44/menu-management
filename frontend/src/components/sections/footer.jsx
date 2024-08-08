@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import useSWR from 'swr';
 
 const Footer = () => {
   return (
@@ -47,52 +48,69 @@ export default Footer
 
 
 
-export const Footer2 = () =>{
-  return ( <footer className="bg-black/10 text-muted-foreground px-4 py-8 sm:px-6 lg:px-8">
-    <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div>
-        <h3 className="text-lg font-bold mb-4">About Us</h3>
-        <p>
-          MMS is a family-owned establishment serving delicious meals made with fresh, high-quality
-          ingredients.
-        </p>
-      </div>
-      <div>
-        <h3 className="text-lg font-bold mb-4">Business Hours</h3>
-        <p>
-          Monday - Friday: 11am - 9pm
-          <br />
-          Saturday - Sunday: 10am - 10pm
-        </p>
-      </div>
-      <div>
-        <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-        <div className="flex gap-4">
-          <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-            <FacebookIcon className="w-6 h-6" />
-          </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-            <TwitterIcon className="w-6 h-6" />
-          </Link>
-          <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-            <InstagramIcon className="w-6 h-6" />
-          </Link>
+// SWR fetcher function
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export const Footer2 = () => {
+  // Fetch timings data
+  const { data: timings, error } = useSWR('/api/timings', fetcher);
+
+  // Error handling
+  if (error) return <div>Failed to load timings</div>;
+  if (!timings) return null;
+
+  return (
+    <footer className="bg-black/10 text-muted-foreground px-4 py-8 mt-5 md:mt-8 sm:px-6 lg:px-8">
+      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div>
+          <h3 className="text-lg font-bold mb-4">About Us</h3>
+          <p>
+            MMS is a family-owned establishment serving delicious meals made with fresh, high-quality
+            ingredients.
+          </p>
+        </div>
+        <div>
+          <h3 className="text-lg font-bold mb-4">Business Hours</h3>
+          <ul>
+  {timings.map((timing) => (
+    <li key={timing.id} className="flex justify-between">
+      <span className="w-1/3">{timing.day}:</span>
+      <span className="w-2/3"> {timing.isOutOfService ? '(Out of Service)' : timing.hours}</span>
+    </li>
+  ))}
+</ul>
+
+        </div>
+        <div>
+          <h3 className="text-lg font-bold mb-4">Follow Us</h3>
+          <div className="flex gap-4">
+            <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <FacebookIcon className="w-6 h-6 text-primary" />
+            </Link>
+            <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <TwitterIcon className="w-6 h-6 text-primary" />
+            </Link>
+            <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <InstagramIcon className="w-6 h-6 text-primary" />
+            </Link>
+          </div>
+        </div>
+        <div>
+          <h3 className="text-lg font-bold mb-4">Contact Us</h3>
+          <p>
+            123 Street, London, UK
+            <br />
+            Phone: +44 (744) 7890
+            <br />
+            Email: info@restaurant.com
+          </p>
         </div>
       </div>
-      <div>
-        <h3 className="text-lg font-bold mb-4">Contact Us</h3>
-        <p>
-          123 Main Street, Anytown USA
-          <br />
-          Phone: +44 (744) 7890
-          <br />
-          Email: info@restaurant.com
-        </p>
-      </div>
-    </div>
-    <div className="mt-8 text-center text-sm">Copyright &copy; 2024 Restaurant. All rights reserved.</div>
-  </footer>)
-}
+      <div className="mt-8 text-center text-sm">Copyright &copy; 2024 Restaurant. All rights reserved.</div>
+    </footer>
+  );
+};
+
 
 
 

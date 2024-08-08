@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Timing {
+  id            Int      @id @default(autoincrement())
+  day           String
+  hours         String?
+  isOutOfService Boolean  @default(false)
+}
+
+
+model Category {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  image       String
+  mealPeriod  String
+  minAge      Int
+}
+
+model MenuItem {
+  id             String          @id @default(uuid())
+  name           String
+  description    String
+  price          Float
+  category       String
+  imageUrl       String
+  ingredients    Ingredient[]
+  sizes          Size[]
+  baseIngredients BaseIngredient[]
+}
+
+model Ingredient {
+  id        String   @id @default(uuid())
+  name      String
+  quantity  Float
+  unit      String
+  price     Float
+  menuItem  MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  menuItemId String
+}
+
+model Size {
+  id        String   @id @default(uuid())
+  name      String
+  price     Float
+  menuItem  MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  menuItemId String
+}
+
+model BaseIngredient {
+  id        String   @id @default(uuid())
+  name      String
+  menuItem  MenuItem @relation(fields: [menuItemId], references: [id],  onDelete: Cascade)
+  menuItemId String
+}
+
+
+model DropDownIngredient {
+  id    Int    @id @default(autoincrement())
+  name  String
+}

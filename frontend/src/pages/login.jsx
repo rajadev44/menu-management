@@ -9,11 +9,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/dashboard");
+  };
+
   return (
-    <div className="w-svw my-14">
+    <div className='w-svw my-14'>
       <Card className='w-full max-w-sm m-auto shadow-xl'>
         <CardHeader>
           <CardTitle className='text-2xl'>Login</CardTitle>
@@ -21,27 +27,25 @@ export function Login() {
             Enter your email below to login to your account.
           </CardDescription>
         </CardHeader>
-        <CardContent className='grid gap-4'>
-          <div className='grid gap-2'>
-            <Label htmlFor='email'>Email</Label> 
-            <Input
-              id='email'
-              type='email'
-              placeholder='JohnDoe@example.com'
-              required
-            />
-          </div>
-          <div className='grid gap-2'>
-            <Label htmlFor='password'>Password</Label>
-            <Input id='password' type='password' required />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Link to='/dashboard'>
-          <Button className='w-full' onClick={()=>{
-          }}>Sign in</Button>
-          </Link>
-        </CardFooter>
+        <form onSubmit={handleSubmit}>
+          <CardContent className='grid gap-4'>
+            <div className='grid gap-2'>
+              <Label htmlFor='email'>Email</Label>
+              <Input
+                id='email'
+                type='email'
+                placeholder='JohnDoe@example.com'
+                required
+              />
+            </div>
+            <div className='grid gap-2'>
+              <Label htmlFor='password'>Password</Label>
+              <Input id='password' type='password' required />
+            </div>
+            <Button className='w-full my-2'> Sign in </Button>
+          </CardContent>
+        </form>
+        <CardFooter></CardFooter>
       </Card>
     </div>
   );

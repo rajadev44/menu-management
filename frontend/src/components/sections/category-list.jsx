@@ -4,13 +4,17 @@ import { Button } from "@/components/ui/button"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Dialog } from "@/components/ui/dialog"
 import CategoryForm from "./category-form"
+import useFetch from '../hook/fetch'
+import Loader from '../ui/loader'
+import CategoryDelete from './category-delete'
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 function CategoryList() {
-  const { data: categories, mutate } = useSWR('/api/categories', fetcher)
+  const { data: categories, mutate , isLoading, error} = useSWR('/api/categories', fetcher)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const {loading:categoryUpdate, fetcher: categoryCreateAndUpdate } = useFetch()
 
   const handleCreateCategory = () => {
     setSelectedCategory(null)
@@ -22,12 +26,6 @@ function CategoryList() {
     setIsModalOpen(true)
   }
 
-  const handleDeleteCategory = async (categoryId) => {
-    await fetch(`/api/categories/${categoryId}`, {
-      method: 'DELETE',
-    })
-    mutate()
-  }
 
   const handleSaveCategory = async (category) => {
     const formData = new FormData();
@@ -47,22 +45,26 @@ function CategoryList() {
       ? `/api/categories/${selectedCategory.id}` 
       : '/api/categories';
   
-    await fetch(url, {
+    await categoryCreateAndUpdate( async () => fetch(url, {
       method,
       body: formData,
-    });
+    }));
   
     mutate();
     setIsModalOpen(false);
   };
   
+  
+  if(isLoading) return  isLoading && <div className='w-full flex justify-center items-center my-2'><Loader className='w-20 h-20'/></div>
+  if(error) return  isLoading && <div className='w-full flex justify-center items-center my-2 text-destructive'><p>Sever Busy</p></div>
+
   return (
-    <div className="">
-      <div className="flex items-center justify-between mb-6">
+    <div className=" flex flex-col">
+      <div className="flex md:flex-row flex-col gap-5 items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Restaurant Categories</h1>
         <Button onClick={handleCreateCategory}>Create Category</Button>
       </div>
-      <div className="overflow-hidden border rounded-lg">
+      <div className="border rounded-lg w-full max-w-[100vw] overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -82,16 +84,14 @@ function CategoryList() {
                 </TableCell>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.description}</TableCell>
-                <TableCell>{category.mealPeriods}</TableCell>
+                <TableCell>{category.mealPeriod}</TableCell>
                 <TableCell>{category.minAge}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleEditCategory(category)}>
+                    <Button variant="secondary" size="sm" onClick={() => handleEditCategory(category)}>
                       Edit
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDeleteCategory(category.id)}>
-                      Delete
-                    </Button>
+                    <CategoryDelete category={category}/>
                   </div>
                 </TableCell>
               </TableRow>
@@ -100,23 +100,11 @@ function CategoryList() {
         </Table>
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <CategoryForm category={selectedCategory} onSave={handleSaveCategory} />
+        <CategoryForm loading={categoryUpdate} category={selectedCategory} onSave={handleSaveCategory} />
       </Dialog>
     </div>
   )
 }
 
-// CategoryList.propTypes = {
-//   initialCategories: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number,
-//       name: PropTypes.string.isRequired,
-//       description: PropTypes.string.isRequired,
-//       image: PropTypes.string.isRequired,
-//       mealPeriods:ropTypes.string.isRequired,
-//       minAge: PropTypes.number.isRequired,
-//     })
-//   ).isRequired,
-// }
 
 export default CategoryList

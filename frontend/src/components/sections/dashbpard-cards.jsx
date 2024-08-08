@@ -1,19 +1,22 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { formatCurrency } from "@/lib/formatters"
+import { PoundSterlingIcon } from "lucide-react"
 
 export default function DashboardCard() {
   const orders = [
-    { id: 1, price: 100, category: "Electronics", product: "Laptop" },
-    { id: 2, price: 50, category: "Clothing", product: "T-Shirt" },
-    { id: 3, price: 75, category: "Electronics", product: "Headphones" },
-    { id: 4, price: 120, category: "Clothing", product: "Dress" },
-    { id: 5, price: 80, category: "Electronics", product: "Smartphone" },
-    { id: 6, price: 90, category: "Clothing", product: "Jeans" },
-    { id: 7, price: 60, category: "Electronics", product: "Tablet" },
-    { id: 8, price: 40, category: "Clothing", product: "Socks" },
-    { id: 9, price: 150, category: "Electronics", product: "Gaming Console" },
-    { id: 10, price: 70, category: "Clothing", product: "Sweater" },
-    { id: 11, price: 85, category: "Electronics", product: "Smartwatch" },
-    { id: 12, price: 55, category: "Clothing", product: "Skirt" },
+    { id: 1, price: 100, category: "Pizza", product: "Laptop" },
+    { id: 2, price: 50, category: "Burger", product: "T-Shirt" },
+    { id: 3, price: 75, category: "Pizza", product: "Headphones" },
+    { id: 4, price: 120, category: "Burger", product: "Dress" },
+    { id: 5, price: 80, category: "Pizza", product: "Smartphone" },
+    { id: 6, price: 90, category: "Burger", product: "Jeans" },
+    { id: 7, price: 60, category: "Pizza", product: "Tablet" },
+    { id: 8, price: 40, category: "Burger", product: "Socks" },
+    { id: 9, price: 150, category: "Pizza", product: "Gaming Console" },
+    { id: 10, price: 70, category: "Burger", product: "Sweater" },
+    { id: 11, price: 85, category: "Pizza", product: "Smartwatch" },
+    { id: 12, price: 55, category: "Burger", product: "Cheese Burger" },
+    { id: 13, price: 55, category: "Burger", product: "Cheese Burger" },
   ]
   const totalOrders = orders.length
   const totalRevenue = orders.reduce((acc, order) => acc + order.price, 0)
@@ -22,15 +25,15 @@ export default function DashboardCard() {
     return acc
   }, {})
   const bestSellingCategoryName = Object.keys(bestSellingCategory).reduce(
-    (max, key) => (bestSellingCategory[key] > bestSellingCategory[max] ? key : max),
-    "",
+    (max, key) => (bestSellingCategory[key] > (bestSellingCategory[max]||0) ? key : max),
+    ""
   )
   const topSellingProduct = orders.reduce((acc, order) => {
     acc[order.product] = (acc[order.product] || 0) + 1
     return acc
   }, {})
   const topSellingProductName = Object.keys(topSellingProduct).reduce(
-    (max, key) => (topSellingProduct[key] > topSellingProduct[max] ? key : max),
+    (max, key) => (topSellingProduct[key] > (topSellingProduct[max]||0) ? key : max),
     "",
   )
   const ordersByCategory = orders.reduce((acc, order) => {
@@ -51,10 +54,10 @@ export default function DashboardCard() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          <DollarSignIcon className="w-4 h-4 text-muted-foreground" />
+          <PoundSterlingIcon className="w-4 h-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+          <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
         </CardContent>
       </Card>
       <Card>
@@ -82,7 +85,7 @@ export default function DashboardCard() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${ordersByCategory["Clothing"].reduce((acc, price) => acc + price, 0).toFixed(2)}
+            {formatCurrency(ordersByCategory["Burger"].reduce((acc, price) => acc + price, 0))}
           </div>
         </CardContent>
       </Card>
@@ -93,17 +96,17 @@ export default function DashboardCard() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${ordersByCategory["Electronics"].reduce((acc, price) => acc + price, 0).toFixed(2)}
+            {formatCurrency(ordersByCategory["Pizza"].reduce((acc, price) => acc + price, 0))}
           </div>
         </CardContent>
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Average Order Value</CardTitle>
-          <DollarSignIcon className="w-4 h-4 text-muted-foreground" />
+          <PoundSterlingIcon className="w-4 h-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${(totalRevenue / totalOrders).toFixed(2)}</div>
+          <div className="text-2xl font-bold">{formatCurrency(totalRevenue / totalOrders)}</div>
         </CardContent>
       </Card>
       <Card>
@@ -113,7 +116,7 @@ export default function DashboardCard() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${orders.reduce((max, order) => (order.price > max ? order.price : max), 0).toFixed(2)}
+            {formatCurrency(orders.reduce((max, order) => (order.price > max ? order.price : max), 0))}
           </div>
         </CardContent>
       </Card>
@@ -124,7 +127,7 @@ export default function DashboardCard() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${orders.reduce((min, order) => (order.price < min ? order.price : min), Infinity).toFixed(2)}
+            {formatCurrency(orders.reduce((min, order) => (order.price < min ? order.price : min), Infinity))}
           </div>
         </CardContent>
       </Card>
@@ -136,49 +139,27 @@ export default function DashboardCard() {
         <CardContent>
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
-              <span>Clothing</span>
+              <span>Burger</span>
               <span>
-                $
-                {(
-                  ordersByCategory["Clothing"].reduce((acc, price) => acc + price, 0) /
-                  ordersByCategory["Clothing"].length
-                ).toFixed(2)}
+                {formatCurrency(
+                  ordersByCategory["Burger"].reduce((acc, price) => acc + price, 0) /
+                  ordersByCategory["Burger"].length
+                )}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span>Electronics</span>
+              <span>Pizza</span>
               <span>
-                $
-                {(
-                  ordersByCategory["Electronics"].reduce((acc, price) => acc + price, 0) /
-                  ordersByCategory["Electronics"].length
-                ).toFixed(2)}
+                {formatCurrency(
+                  ordersByCategory["Pizza"].reduce((acc, price) => acc + price, 0) /
+                  ordersByCategory["Pizza"].length
+                )}
               </span>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
-}
-
-function DollarSignIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    </svg>
   )
 }
 

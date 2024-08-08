@@ -4,10 +4,8 @@ import {
   CircleUser,
   Home,
   Menu,
-  MoonStarIcon,
   Package,
   ShoppingCart,
-  SunIcon,
   Clock10,
   Utensils
 } from "lucide-react";
@@ -27,6 +25,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import AdminFooter from "./admin-footer";
 import Link from "../ui/Link";
 import { Link as ReactLink } from "react-router-dom";
+import DarkModeBtn from "../ui/dark-mode-btn";
 
 const routes = [
   { to: "/dashboard", name: "Dashboard", Icon: <Home className='w-4 h-4' /> },
@@ -36,7 +35,7 @@ const routes = [
     Icon: <ShoppingCart className='w-4 h-4' />,
     badge: (
       <Badge className='flex items-center justify-center w-6 h-6 ml-auto rounded-full shrink-0'>
-        6
+        5
       </Badge>
     ),
   },
@@ -51,6 +50,11 @@ const routes = [
     Icon: <Utensils className='w-4 h-4' />,
   },
   {
+    to: "/dashboard/ingredients",
+    name: "Ingredients",
+    Icon: <Package className='w-4 h-4' />,
+  },
+  {
     to: "/dashboard/timing",
     name: "Timing",
     Icon: <Clock10 className='w-4 h-4' />,
@@ -58,27 +62,10 @@ const routes = [
 ];
 
 const AdminLayout = ({ children }) => {
-  const [isDarkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem("darkMode");
-    return savedMode ? JSON.parse(savedMode) : false;
-  });
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
-
-  const toggleTheme = () => {
-    const newMode = !isDarkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("darkMode", JSON.stringify(newMode));
-  };
   return (
     <div className='container px-0 grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] '>
-      <div className='hidden border-r md:block '>
+      <div className='hidden border-r md:block sticky top-0 left-0 max-h-screen'>
         <div className='flex flex-col h-full max-h-screen gap-2'>
           <div className='flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6'>
             <ReactLink
@@ -109,7 +96,7 @@ const AdminLayout = ({ children }) => {
         </div>
       </div>
       <div className='flex flex-col '>
-        <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
+        <header className='sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-muted px-4 lg:h-[60px] lg:px-6'>
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -147,13 +134,7 @@ const AdminLayout = ({ children }) => {
             </SheetContent>
           </Sheet>
           <div className='flex-1 w-full'>{/*  */}</div>
-          <button onClick={toggleTheme} className='rounded-full'>
-            {isDarkMode ? (
-              <MoonStarIcon className='w-4 h-4' />
-            ) : (
-              <SunIcon className='w-4 h-4' />
-            )}
-          </button>
+          <DarkModeBtn/>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant='secondary' size='icon' className='rounded-full'>
@@ -165,9 +146,8 @@ const AdminLayout = ({ children }) => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem><ReactLink to='/dashboard/login'>Logout</ReactLink></DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { formatCurrency } from "@/lib/formatters"
 
 export default function OrdersComponent() {
   const [orders] = useState([
@@ -99,7 +100,7 @@ export default function OrdersComponent() {
   }
   return (
     <div className="container px-0 ">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex md:flex-row flex-col gap-5 items-center justify-between  mb-6">
         <h1 className="text-2xl font-bold">Orders</h1>
         <div className="flex items-center gap-4">
           <DropdownMenu>
@@ -192,7 +193,7 @@ export default function OrdersComponent() {
                     ))}
                   </ul>
                 </TableCell>
-                <TableCell>${order.total.toFixed(2)}</TableCell>
+                <TableCell>{formatCurrency(order.total)}</TableCell>
                 <TableCell>
                   <Badge
                     variant={

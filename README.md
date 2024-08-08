@@ -1,2 +1,2 @@
 # menu-management
-Menu Management System - MSc Project
+Menu Management System - Msc Project
