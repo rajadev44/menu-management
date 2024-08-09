@@ -26,7 +26,7 @@ export default function MainMenuItem() {
     if (data) {
       setDish({
         ...data,
-        selectedSize: data.sizes[0] || {},
+        selectedSize: data.sizes?.[0] || {},
         customIngredients: [],
       });
     }
@@ -90,7 +90,7 @@ export default function MainMenuItem() {
   if (!dish) return null;
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6">
+    <div className="mx-auto py-6 container px-6 sm:px-12 lg:px-24" >
       <div className="grid md:grid-cols-2 gap-5">
         <div className="flex justify-center">
           <img src={dish.imageUrl} alt={dish.name} className="w-full h-auto rounded-lg object-contain md:object-cover max-h-[400px] aspect-square " />
@@ -155,7 +155,7 @@ export default function MainMenuItem() {
               </div>
             )}
           </div>
-          <div>
+          {dish.sizes.length > 0 && <div>
             <h2 className="text-2xl font-semibold text-foreground">Size</h2>
             <div className="mt-4">
               <RadioGroup value={dish.selectedSize.id} onValueChange={handleSelectSize} className="grid gap-4">
@@ -173,7 +173,7 @@ export default function MainMenuItem() {
                 ))}
               </RadioGroup>
             </div>
-          </div>
+          </div>}
           <div>
             <h2 className="text-2xl font-semibold text-foreground">Total Price</h2>
             <div className="text-3xl font-bold text-foreground mt-4">{formatCurrency(calculateTotalPrice())}</div>

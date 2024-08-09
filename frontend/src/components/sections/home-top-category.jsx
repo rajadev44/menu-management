@@ -4,7 +4,7 @@ export default function TopCategories({ categories }) {
   
   return (
     <section className="">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-6 sm:px-12 lg:px-24 ">
         <h2 className="text-2xl font-bold mb-8 md:text-3xl lg:text-4xl text-center">Top Categories</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (

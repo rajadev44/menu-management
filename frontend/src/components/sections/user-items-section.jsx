@@ -58,7 +58,7 @@ export default function UserItemsSections() {
         if (filters.category.length > 0 && !filters.category.includes(item.category)) {
           return false;
         }
-        if (filters.priceRange[0] > (item.price + item.sizes[0].price) || filters.priceRange[1] < (item.price + item.sizes[0].price)) {
+        if (filters.priceRange[0] > (item.price + (item.sizes?.[0]?.price || 0)) || filters.priceRange[1] < (item.price + (item.sizes?.[0]?.price || 0))) {
           return false;
         }
         if (
@@ -74,9 +74,9 @@ export default function UserItemsSections() {
           case "popularity":
             return b.popularity - a.popularity;
           case "price-asc":
-            return (a.price + a.sizes[0].price ) - (b.price + b.sizes[0].price);
+            return (a.price + (a.sizes?.[0]?.price || 0)) - (b.price + (b.sizes?.[0]?.price || 0));
             case "price-desc":
-            return (b.price + b.sizes[0].price ) - (a.price + a.sizes[0].price);
+            return (b.price + (b.sizes?.[0]?.price || 0) ) - (a.price + (a.sizes?.[0]?.price || 0));
           default:
             return 0;
         }
@@ -95,7 +95,7 @@ export default function UserItemsSections() {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 p-4 md:p-8">
+    <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 p-4 md:p-8 container px-6 sm:px-12 lg:px-24">
       <SidebarFilter filters={filters} setFilters={setFilters} />
       <div>
         <div className="flex items-center justify-between mb-4">
@@ -137,7 +137,7 @@ export default function UserItemsSections() {
                   <h3 className="text-lg font-bold mb-2">{item.name}</h3>
                   <p className="text-muted-foreground mb-4">{item.description}</p>
                   <div className="flex flex-col items-center gap-2 mt-auto">
-                    <span className="text-primary font-bold">{formatCurrency(item.price + item.sizes[0].price)}</span>
+                    <span className="text-primary font-bold">{formatCurrency(item.price + (item.sizes?.[0]?.price || 0))}</span>
                     <div className="flex items-center gap-1 text-yellow-500">
                       <StarFilledIcon className="w-4 h-4" />
                       <span>{item.popularity}</span>

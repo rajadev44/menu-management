@@ -60,7 +60,7 @@ export const Footer2 = () => {
   if (!timings) return null;
 
   return (
-    <footer className="bg-black/10 text-muted-foreground px-4 py-8 mt-5 md:mt-8 sm:px-6 lg:px-8 sticky top-[100vh]">
+    <footer className="bg-black/10 text-muted-foreground py-8 mt-5 md:mt-8 px-6 sm:px-12 lg:px-24 sticky top-[100vh]">
       <div className="container px-0 grid grid-cols-1 sm:grid-cols-2 lg:flex justify-between gap-8">
         <div className="max-w-80">
           <h3 className="text-lg font-bold mb-4">About Us</h3>

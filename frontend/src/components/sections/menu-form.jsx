@@ -234,7 +234,7 @@ export default function MenuItemForm() {
                   </Button>
                 </div>
               ))}
-              {(getValues().sizes.length === 0 || (errors.sizes && errors?.sizes?.message)) && <span className="text-red-500">{errors?.sizes?.message || 'Please attach at least one size'}</span>}
+              {/* {(getValues().sizes.length === 0 || (errors.sizes && errors?.sizes?.message)) && <span className="text-red-500">{errors?.sizes?.message || 'Please attach at least one size'}</span>} */}
               <Button type="button" onClick={() => appendSize({ name: '', price: '' })}>
                 Add Size
               </Button>

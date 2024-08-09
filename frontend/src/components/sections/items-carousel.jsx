@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 export const DynamicCarousel = ({ items }) => {
   return (
-    <Carousel className='mt-8'>
+    <Carousel className='mt-8 w-full'>
       <CarouselContent>
         {items.map((item) => (
           <CarouselItem key={item.id} className='md:basis-1/2 lg:basis-1/3'>
@@ -30,7 +30,7 @@ export const DynamicCarousel = ({ items }) => {
                     {item.description}
                   </p>
                   <div className='flex items-center justify-between mt-4'>
-                    <span className='text-lg font-bold'>{formatCurrency(item.price + item.sizes[0].price)}</span>
+                    <span className='text-lg font-bold'>{formatCurrency(item.price + (item.sizes?.[0]?.price || 0) )}</span>
                     <Link to={`/items/${item.id}`}>
                       <Button variant='outline' size='sm'>
                         View

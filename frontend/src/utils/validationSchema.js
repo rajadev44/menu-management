@@ -54,7 +54,7 @@ export const menuItemSchema = z.object({
       name: z.string().min(1, "Size Name is required"),
       price: z.coerce.number().nonnegative("Price must be non-negative"),
     })
-  ).min(1, { message: 'Please attach at least one size variation' }),
+  ).optional(),
   baseIngredients: z.array(
     z.object({
       name: z.string().min(1, "Base ingredient name is required"),
@@ -82,7 +82,7 @@ export const editMenuItemSchema = z.object({
       name: z.string().min(1, "Size label is required"),
       price: z.coerce.number().nonnegative("Price must be non-negative"),
     })
-  ).min(1, { message: 'Please attach at least one size variation' }),
+  ).optional(),
   baseIngredients: z.array(
     z.object({
       name: z.string().min(1, "Base ingredient name is required"),

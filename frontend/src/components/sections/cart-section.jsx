@@ -35,7 +35,7 @@ export default function   Cart() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 md:px-6">
+    <div className="py-8 container px-6 sm:px-12 lg:px-24">
       <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
       {cart.length === 0 ? (
         <div className="text-center text-muted-foreground">Your cart is empty.</div>
@@ -54,20 +54,20 @@ export default function   Cart() {
                     <h2 className="text-lg font-bold">{item.name}</h2>
                     <p className="text-muted-foreground text-sm">{item.description}</p>
                     <div className="flex flex-wrap gap-2 mt-2 text-sm">
-                      <div>
+                      {item.selectedSize.name && <div>
                         <span className="font-medium">Size:</span> {item.selectedSize.name}
-                      </div>
+                      </div>}
                       <div>
                         <span className="font-medium">Ingredients:</span> {item.baseIngredients.map((ing) => ing.name).join(", ")}
                       </div>
-                      <div>
+                      { item.customIngredients.length > 0  && <div>
                         <span className="font-medium">Addons Ingredients:</span> {item.customIngredients.map((ing, i) => (
                           <span key={i}>
                             {ing.name} x{ing.quantity} - {formatCurrency(ing.price)}
                             {i < item.customIngredients.length - 1 && ", "}
                           </span>
                         ))}
-                      </div>
+                      </div>}
                     </div>
                   </div>
                   <div className="flex items-center justify-between mt-4">
@@ -85,8 +85,8 @@ export default function   Cart() {
       {cart.length > 0 && (
         <div className="mt-8 p-6 rounded-lg shadow-sm">
           <div className="flex flex-col justify-between gap-2">
-            <div className="font-medium text-lg">Order Note</div>
-            <Textarea className="w-full h-32 mb-4" placeholder='Type Notes... '/>
+            <div className="font-medium text-lg">Order Notes</div>
+            <Textarea className="w-full h-32 mb-4" placeholder='Add notes for your order'/>
           </div>
         </div>
       )}

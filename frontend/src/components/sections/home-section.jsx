@@ -61,7 +61,7 @@ export default function HomeComponent() {
       </section>
       <TopCategories categories={categories || []} />
       <section className=''>
-        <div className='container'>
+        <div className='container  px-6 sm:px-12 lg:px-24 '>
           <div className='flex flex-col items-center'>
             <h2 className='text-2xl font-bold md:text-3xl lg:text-4xl'>
               Top Menu Items
@@ -70,7 +70,7 @@ export default function HomeComponent() {
               Explore our most popular and delicious menu items.
             </p>
           </div>
-          <div className='w-11/12 mx-auto'>
+          <div className='w-full'>
             <DynamicCarousel items={items || []} />
           </div>
         </div>
