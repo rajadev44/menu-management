@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 // Get all dropdown ingredients
 router.get('/', async (req, res) => {
-  const ingredients = await prisma.dropDownIngredient.findMany();
+  const ingredients = await prisma.dropDownIngredient.findMany({orderBy:{name:'asc'}});
   res.json(ingredients);
 });
 
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { name } = req.body;
   const newIngredient = await prisma.dropDownIngredient.create({
-    data: { name },
+    data: { name }, 
   });
   res.status(201).json(newIngredient);
 });

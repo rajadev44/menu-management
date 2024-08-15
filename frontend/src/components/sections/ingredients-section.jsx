@@ -21,20 +21,38 @@ export default function IngredientsPage() {
   }
 
   const addIngredient = async () => {
-    if (newIngredient.name.trim()) {
+    const trimmedName = newIngredient.name.trim().toLowerCase();
+  
+    if (trimmedName) {
+      // Check if the ingredient already exists
+      const duplicateIngredient = ingredients.find(
+        (ingredient) => ingredient.name.toLowerCase() === trimmedName
+      );
+  
+      if (duplicateIngredient) {
+        alert("Ingredient with this name already exists!");
+        return;
+      }
+  
       const response = await fetch('/api/ingredients', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newIngredient),
-      })
-      const data = await response.json()
-      mutate([...ingredients, data], false)
-      setNewIngredient({ name: "" })
+        body: JSON.stringify({ name: trimmedName }),
+      });
+      
+      if (response.ok) {
+        await response.json();
+        mutate();
+        setNewIngredient({ name: "" });
+      } else {
+        alert("Failed to add ingredient. Please try again.");
+      }
+    } else {
+      alert("Ingredient name cannot be empty.");
     }
-  }
-
+  };
   const deleteIngredient = async (id) => {
     await fetch(`/api/ingredients/${id}`, {
       method: 'DELETE',
@@ -50,7 +68,7 @@ export default function IngredientsPage() {
       },
       body: JSON.stringify(currentIngredient),
     })
-    mutate(ingredients.map((i) => (i.id === currentIngredient.id ? currentIngredient : i)), false)
+    mutate()
     setCurrentIngredient(null)
     setIsDialogOpen(false)
   }

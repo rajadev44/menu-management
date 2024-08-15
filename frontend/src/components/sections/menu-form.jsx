@@ -20,9 +20,9 @@ const defaultValues = {
   price: null,
   category: '',
   imageUrl: null,
-  ingredients: [{ name: '', quantity: null, unit: '', price: null }],
-  sizes: [{ name: '', price: '' }],
-  baseIngredients: [{ name: '' }],
+  ingredients: [],
+  sizes: [],
+  baseIngredients: [],
 };
 
 export default function MenuItemForm() {
@@ -36,13 +36,15 @@ export default function MenuItemForm() {
     register,
     handleSubmit,
     control,
+    watch,
     reset,
     setValue,
-    getValues,
     formState: { errors },
+    trigger,  // Add trigger to manually run validation
   } = useForm({
     resolver: zodResolver(isEditMode ? editMenuItemSchema : menuItemSchema),
     defaultValues,
+    mode: 'all', // Trigger validation on change
   });
 
   const { fields: baseIngredientsFields, append: appendBaseIngredient, remove: removeBaseIngredient } = useFieldArray({
@@ -59,6 +61,24 @@ export default function MenuItemForm() {
     control,
     name: 'ingredients',
   });
+
+  // Watch for changes in field arrays
+  const watchedBaseIngredients = watch('baseIngredients');
+  const watchedSizes = watch('sizes');
+  const watchedIngredients = watch('ingredients');
+
+  // Validate when arrays change
+  useEffect(() => {
+    trigger('baseIngredients'); // Manually trigger validation for baseIngredients
+  }, [watchedBaseIngredients, trigger, baseIngredientsFields]);
+
+  useEffect(() => {
+    trigger('sizes'); // Manually trigger validation for sizes
+  }, [watchedSizes, trigger, sizesFields]);
+
+  useEffect(() => {
+    trigger('ingredients'); // Manually trigger validation for ingredients
+  }, [watchedIngredients, trigger, ingredientsFields]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -122,6 +142,15 @@ export default function MenuItemForm() {
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
+  };
+
+  
+  const handleDescriptionKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(onSubmit)();
+    }
+    // If Shift + Enter is pressed, the default behavior (inserting a newline) will occur.
   };
 
   return (
@@ -190,7 +219,7 @@ export default function MenuItemForm() {
                   )}
                 </div>
               ))}
-              {(getValues().baseIngredients.length === 0 || (errors.baseIngredients && errors?.baseIngredients?.message)) && <span className="text-red-500">{errors?.baseIngredients?.message || 'Please attach at least one base ingredient'}</span>}
+              {errors?.baseIngredients?.root && <span className="text-red-500">{errors?.baseIngredients?.root?.message}</span>}
               <Button type="button" onClick={() => appendBaseIngredient({ name: '' })}>
                 Add Base Ingredient
               </Button>
@@ -234,7 +263,6 @@ export default function MenuItemForm() {
                   </Button>
                 </div>
               ))}
-              {/* {(getValues().sizes.length === 0 || (errors.sizes && errors?.sizes?.message)) && <span className="text-red-500">{errors?.sizes?.message || 'Please attach at least one size'}</span>} */}
               <Button type="button" onClick={() => appendSize({ name: '', price: '' })}>
                 Add Size
               </Button>
@@ -299,7 +327,7 @@ export default function MenuItemForm() {
                         {...register(`ingredients.${index}.unit`)}
                         className={`w-full ${errors.ingredients?.[index]?.unit ? 'border-red-500' : ''}`}
                       />
-                      {errors.ingredients?.[index]?.unit && (
+                      {errors?.ingredients?.[index]?.unit && (
                         <span className="text-red-500">{errors.ingredients[index].unit.message}</span>
                       )}
                     </div>
@@ -309,7 +337,7 @@ export default function MenuItemForm() {
                   </Button>
                 </div>
               ))}
-              {(getValues().ingredients.length === 0 || (errors.ingredients && errors?.ingredients?.message)) && <span className="text-red-500">{errors?.ingredients?.message || 'Please attach at least one ingredients'}</span>}
+              {errors?.ingredients?.root && <span className="text-red-500">{errors?.ingredients?.root?.message}</span>}
               <Button type="button" onClick={() => appendIngredient({ name: '', quantity: null, unit: '', price: null })}>
                 Add Ingredient
               </Button>
@@ -354,6 +382,7 @@ export default function MenuItemForm() {
             <Textarea
               id="description"
               {...register('description')}
+              onKeyDown={handleDescriptionKeyDown}
               className={` ${errors.description ? 'border-red-500' : ''}`}
             />
             {errors.description && <span className="text-red-500">{errors.description.message}</span>}

@@ -41,19 +41,45 @@ export default function MainMenuItem() {
 
   const handleAddCustomIngredient = () => {
     if (!selectedIngredient || !customQuantity) return;
+  
     const ingredient = dish.ingredients.find((ing) => ing.name === selectedIngredient);
     if (!ingredient) return;
-    setCustomIngredients((prevCustomIngredients) => [
-      ...prevCustomIngredients,
-      {
-        ...ingredient,
-        quantity: customQuantity,
-        price: ingredient.price * customQuantity,
-      },
-    ]);
+  
+    setCustomIngredients((prevCustomIngredients) => {
+      const existingIngredientIndex = prevCustomIngredients.findIndex(
+        (ing) => ing.name === selectedIngredient
+      );
+  
+      if (existingIngredientIndex >= 0) {
+        // Update the existing ingredient
+        const updatedIngredients = prevCustomIngredients.map((ing, index) => {
+          if (index === existingIngredientIndex) {
+            return {
+              ...ing,
+              quantity: ing.quantity + customQuantity,
+              price: (ing.quantity + customQuantity) * ing.price,
+            };
+          }
+          return ing;
+        });
+        return updatedIngredients;
+      } else {
+        // Add new ingredient
+        return [
+          ...prevCustomIngredients,
+          {
+            ...ingredient,
+            quantity: customQuantity,
+            price: ingredient.price * customQuantity,
+          },
+        ];
+      }
+    });
+  
     setCustomQuantity(Number.NaN);
     setSelectedIngredient('');
   };
+  
 
   const handleRemoveCustomIngredient = (ingredientIndex) => {
     setCustomIngredients((prevCustomIngredients) =>
@@ -101,6 +127,7 @@ export default function MainMenuItem() {
             <h1 className="text-4xl font-bold text-foreground">{dish.name}</h1>
             <p className="text-lg text-muted-foreground/60 mt-4">{dish.description}</p>
           </div>
+          {dish.baseIngredients.length > 0 &&
           <div>
             <h2 className="text-2xl font-semibold text-foreground">Ingredients</h2>
             <ul className="mt-4">
@@ -114,8 +141,9 @@ export default function MainMenuItem() {
               ))}
             </ul>
           </div>
+          }
           <div>
-            <h2 className="text-2xl font-semibold text-foreground">Add Ingredient</h2>
+            {dish.ingredients.length > 0 && <><h2 className="text-2xl font-semibold text-foreground">Add Ingredient</h2>
             <div className="grid gap-4 mt-4">
               <div className="grid sm:grid-cols-[1fr_auto] gap-4">
                 <ItemIngredientsDropDown
@@ -137,14 +165,14 @@ export default function MainMenuItem() {
               <Button size="sm" variant="outline" onClick={handleAddCustomIngredient}>
                 Add Ingredient
               </Button>
-            </div>
+            </div></>}
             {customIngredients.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold text-foreground">Addons</h3>
                 <ul className="mt-4">
                   {customIngredients.map((ingredient, index) => (
                     <li key={index} className="flex items-center justify-between py-2 border-b">
-                      <div className="text-muted-foreground/80">{ingredient.name}</div>
+                      <div className="text-muted-foreground/80">{ingredient.name} ({ingredient.quantity || ''})</div>
                       <div className="text-muted-foreground/80">{formatCurrency(ingredient.price)}</div>
                       <Button size="icon" variant="outline" onClick={() => handleRemoveCustomIngredient(index)}>
                         <XIcon className="h-5 w-5" />

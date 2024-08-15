@@ -86,9 +86,10 @@ export default function MenuItemComponent() {
                 <p className='text-muted-foreground'>{item.category}</p>
               </div>
 
-              <div className='mt-4'>
+               <div className='mt-4'>
                 <h3 className='mb-2 text-lg font-medium'>Ingredients</h3>
                 <ul className='pl-4 list-disc'>
+                  {!item?.baseIngredients?.length && <p className="font-bold">-</p>}
                   {item.baseIngredients.map((base, index) => (
                     <li key={index}>{base.name}</li>
                   ))}
@@ -98,6 +99,8 @@ export default function MenuItemComponent() {
               <div className='mt-4'>
                 <h3 className='mb-2 text-lg font-medium'>Sizes</h3>
                 <ul className='pl-4 list-disc'>
+                  {!item?.sizes?.length && <p className="font-bold">-</p>}
+
                   {item.sizes.map((size, index) => (
                     <li key={index}>
                       {size.name} - {formatCurrency(size.price)}
@@ -109,7 +112,8 @@ export default function MenuItemComponent() {
               <div className='mt-4'>
                 <h3 className='mb-2 text-lg font-medium'>Addons</h3>
                 <ul className='pl-4 list-disc'>
-                  {item.ingredients.map((ingredient, index) => (
+                {!item?.ingredients?.length && <p className="font-bold">-</p>}
+                {item.ingredients.map((ingredient, index) => (
                     <li key={index}>
                       {ingredient.quantity ? ingredient.quantity : ''} {ingredient.unit} {ingredient.name} ({formatCurrency(ingredient.price)})
                     </li>

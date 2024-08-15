@@ -11,13 +11,21 @@ const prisma = new PrismaClient();
 router.get('/', async (req, res) => {
   const menuItems = await prisma.menuItem.findMany({
     include: {
-      ingredients: true,
+      ingredients: {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
       sizes: {
         orderBy: {
           price: 'asc', 
         },
       },
-      baseIngredients: true,
+      baseIngredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
     },
   });
   res.json(menuItems);
@@ -28,13 +36,21 @@ router.get('/top', async (req, res) => {
   const menuItems = await prisma.menuItem.findMany({
     take: 3,
     include: {
-      ingredients: true,
+      ingredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
       sizes:  {
         orderBy: {
           price: 'asc', 
         },
       },
-      baseIngredients: true,
+      baseIngredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
     },
   });
   res.json(menuItems);
@@ -46,13 +62,21 @@ router.get('/:id', async (req, res) => {
   const item = await prisma.menuItem.findUnique({
     where: { id },
     include: {
-      ingredients: true,
+      ingredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
       sizes:  {
         orderBy: {
           price: 'asc', 
         },
       },
-      baseIngredients: true,
+      baseIngredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
     },
   });
   if (item) {
@@ -84,13 +108,21 @@ router.post('/', uploadImage.single('image'), async (req, res) => {
       },
     },
     include: {
-      ingredients: true,
+      ingredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
       sizes:  {
         orderBy: {
           price: 'asc', 
         },
       },
-      baseIngredients: true,
+      baseIngredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
     },
   });
   res.status(201).json(newItem);
@@ -141,13 +173,21 @@ router.put('/:id', uploadImage.single('image'), async (req, res) => {
       },
     },
     include: {
-      ingredients: true,
+      ingredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
       sizes:  {
         orderBy: {
           price: 'asc', 
         },
       },
-      baseIngredients: true,
+      baseIngredients:  {
+        orderBy: {
+          name: 'asc', 
+        },
+      },
     },
   });
 
