@@ -24,7 +24,7 @@ const routes = [
 const Header = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const [search, setSearch] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (!search || search === '') {
+    if ((!search || search === '') && searchParams.get('search')) {
       setSearchParams((params) => {
         params.delete('search');
         return params;

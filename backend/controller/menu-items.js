@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 // Get top 3 menu items
 router.get('/top', async (req, res) => {
   const menuItems = await prisma.menuItem.findMany({
-    take: 3,
+    take: 5,
     include: {
       ingredients:  {
         orderBy: {

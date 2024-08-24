@@ -204,7 +204,7 @@ const SidebarFilter = ({ filters, setFilters }) => {
 
   const handleCategoryChange = (categoryName) => {
     
-    if(category){
+    if(category && searchParams.get('category')){
       // Remove a query parameter
       setSearchParams((params) => {
         params.delete('category');
